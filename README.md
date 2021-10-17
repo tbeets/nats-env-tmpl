@@ -11,7 +11,7 @@
 ## Bootstrap
 
 ```bash
-git clone git@github.com:tbeets/nats-lab-tmpl.git <YOUR PROJECT DIRECTORY>
+git clone git@github.com:tbeets/nats-env-tmpl.git <YOUR PROJECT DIRECTORY>
 cd <YOUR PROJECT DIRECTORY>
 ./lab-bootstrap.sh
 ./run-serverpki.sh
