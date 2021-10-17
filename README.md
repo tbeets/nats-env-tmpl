@@ -1,17 +1,22 @@
 # nats-lab
 
-## Configure operator and system account
+## Pre-requisites
+* linux
+* docker
+* git
+* jq
+* nats cli tool
+* nsc cli tool
+
+## Bootstrap
 
 ```bash
+git clone git@github.com:tbeets/nats-lab-tmpl.git <YOUR PROJECT DIRECTORY>
+cd <YOUR PROJECT DIRECTORY>
+./lab-bootstrap.sh
+./run-serverpki.sh
 source ./setnscenv.sh
-nsc add operator "NatsOp"
-# location of NatsOp credential placed in server's operator configuration 
-nsc edit operator --service-url "nats://localhost:4222"
-nsc edit operator --account-jwt-server-url "nats://localhost:4222"
-nsc add account --name SYS
-nsc add user --account SYS --name System
-nsc edit operator --system-account "<public NKEY of SYS>"
-# public NKEY of SYS placed in server's system_account configuration
+nsc push --all
 ```
 
 ## Configure base accounts and users

@@ -24,9 +24,6 @@ SYSTEMACCTPUBNKEY=`cat ${NSC_HOME}/nats/${OPERATORNAME}/accounts/${SYSTEMACCTNAM
 
 nsc edit operator --system-account ${SYSTEMACCTPUBNKEY} 
 
-# location of NatsOp credential placed in server's operator configuration
-# public NKEY of SYS placed in server's system_account configuration
-
 echo -e "\nWriting server configuration:\n"
 tee ./conf/serverpki.conf <<EOF
 server_name: ${SERVERNAME}
@@ -49,3 +46,18 @@ resolver: {
   limit: 1000
 }
 EOF
+
+echo -e "\nWriting server start script (docker):\n"
+tee./run-serverpki.sh <<EOF
+#!/bin/bash
+
+docker run -it \
+		--mount type=bind,source="$(pwd)"/conf,target=/conf \
+		--mount type=bind,source="$(pwd)"/vault,target=/vault \
+		--mount type=bind,source="$(pwd)"/state,target=/state \
+		-p ${NATSPORT}:${NATSPORT} \
+		-p ${NATSMONITORPORT}:${NATSMONITORPORT} \
+		nats:latest --config /conf/serverpki.conf
+EOF
+chmod u+x ./run-serverpki.sh
+
