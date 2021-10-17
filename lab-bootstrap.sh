@@ -48,7 +48,7 @@ resolver: {
 EOF
 
 echo -e "\nWriting server start script (docker):\n"
-tee./run-serverpki.sh <<EOF
+tee ./run-serverpki.sh <<EOF
 #!/bin/bash
 
 docker run -it \
