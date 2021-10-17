@@ -51,12 +51,12 @@ echo -e "\nWriting server start script (docker):\n"
 tee ./run-serverpki.sh <<EOF
 #!/bin/bash
 
-docker run -it \
-  --mount type=bind,source="$(pwd)"/conf,target=/conf \
-  --mount type=bind,source="$(pwd)"/vault,target=/vault \
-  --mount type=bind,source="$(pwd)"/state,target=/state \
-  -p ${NATSPORT}:${NATSPORT} \
-  -p ${NATSMONITORPORT}:${NATSMONITORPORT} \
+docker run -it \\
+  --mount type=bind,source="$(pwd)"/conf,target=/conf \\
+  --mount type=bind,source="$(pwd)"/vault,target=/vault \\
+  --mount type=bind,source="$(pwd)"/state,target=/state \\
+  -p ${NATSPORT}:${NATSPORT} \\
+  -p ${NATSMONITORPORT}:${NATSMONITORPORT} \\
   nats:latest --config /conf/serverpki.conf
 EOF
 chmod u+x ./run-serverpki.sh
