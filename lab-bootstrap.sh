@@ -66,7 +66,7 @@ echo -e "\nWriting server start script (docker):\n"
 tee ./run-serverpki.sh <<EOF
 #!/bin/bash
 
-docker run -it \\
+docker run -d \\
   --mount type=bind,source="$(pwd)"/conf,target=/conf \\
   --mount type=bind,source="$(pwd)"/vault,target=/vault \\
   --mount type=bind,source="$(pwd)"/state,target=/state \\
