@@ -76,3 +76,19 @@ docker run -d \\
 EOF
 chmod u+x ./run-serverpki.sh
 
+echo -e "\nWriting env.json file:\n"
+tee ./conf/env.json <<EOF
+{
+ "SERVERNAME": "${SERVERNAME}",
+ "NATSHOST": "${NATSHOST}",
+ "NATSPORT": "${NATSPORT}",
+ "NATSMONITORPORT": "${NATSMONITORPORT}",
+ "OPERATORNAME": "${OPERATORNAME}",
+ "SYSTEMACCTNAME": "${SYSTEMACCTNAME}",
+ "SYSTEMUSERNAME": "${SYSTEMUSERNAME}",
+ "NATSURL": "nats://${NATSHOST}:${NATSPORT}",
+ "MONITORURL": "http://${NATSHOST}:${NATSMONITORPORT}"
+}
+EOF
+
+
