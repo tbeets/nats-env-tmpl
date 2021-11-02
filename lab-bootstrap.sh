@@ -3,8 +3,8 @@
 source ./setnscenv.sh
 
 # EDIT THESE
-PKI="true"
-DOCKER="true"
+PKI="false"
+DOCKER="false"
 SERVERNAME="nats-lab"
 NATSHOST="localhost"
 NATSPORT="4222"
@@ -78,13 +78,16 @@ else
 tee --append ./conf/server.conf <<EOF
 accounts: {
     AcctA: {
-	    users: [ {user: UserA1, password: s3cr3t}, {user: UserA2, password: s3cr3t} ]
+	  jetstream: enabled 
+	  users: [ {user: UserA1, password: s3cr3t}, {user: UserA2, password: s3cr3t} ]
 	},
     AcctB: {
-	    users: [ {user: UserB1, password: s3cr3t}, {user: UserB2, password: s3cr3t} ]
+	  jetstream: enabled
+	  users: [ {user: UserB1, password: s3cr3t}, {user: UserB2, password: s3cr3t} ]
 	},
     AcctC: {
-	    users: [ {user: UserC1, password: s3cr3t}, {user: UserC2, password: s3cr3t} ]
+	  jetstream: enabled
+	  users: [ {user: UserC1, password: s3cr3t}, {user: UserC2, password: s3cr3t} ]
 	},
 	${SYSTEMACCTNAME}: {
 	    users: [ {user: ${SYSTEMUSERNAME}, password: s3cr3t} ]
