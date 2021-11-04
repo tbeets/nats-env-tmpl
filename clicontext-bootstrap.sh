@@ -6,6 +6,10 @@ SYSTEMACCTNAME=`cat ./conf/env.json | jq -r .SYSTEMACCTNAME`
 SYSTEMUSERNAME=`cat ./conf/env.json | jq -r .SYSTEMUSERNAME`
 PKI=`cat ./conf/env.json | jq -r .PKI`
 
+delcontext () {
+nats ctx rm --force $CTXNAME
+}
+
 setcontext () {
 if [ "${PKI}" = "true" ]; then
 nats ctx save \
@@ -24,6 +28,12 @@ fi
 CTXLIST=( 'System' 'UserA1' 'UserA2' 'UserB1' 'UserB2' 'UserC1' 'UserC2' )
 ACCTLIST=( $SYSTEMACCTNAME 'AcctA' 'AcctA' 'AcctB' 'AcctB' 'AcctC' 'AcctC')
 USERLIST=( $SYSTEMUSERNAME 'UserA1' 'UserA2' 'UserB1' 'UserB2' 'UserC1' 'UserC2' )
+
+
+for (( i = 0; i < ${#CTXLIST[@]}; ++i )); do
+    CTXNAME=${CTXLIST[i]}
+    delcontext
+done
 
 for (( i = 0; i < ${#CTXLIST[@]}; ++i )); do
     CTXNAME=${CTXLIST[i]}
