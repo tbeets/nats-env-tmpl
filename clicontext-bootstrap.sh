@@ -6,6 +6,18 @@ SYSTEMACCTNAME=`cat ./conf/env.json | jq -r .SYSTEMACCTNAME`
 SYSTEMUSERNAME=`cat ./conf/env.json | jq -r .SYSTEMUSERNAME`
 PKI=`cat ./conf/env.json | jq -r .PKI`
 
+setdefaultcontext () {
+nats ctx select $CTXNAME
+}
+
+delworkaround () {
+# workaround to can't delete current default
+nats ctx save \
+		--server ignoreme:1234 \
+	    IGNOREME	
+nats ctx select IGNOREME
+}
+
 delcontext () {
 nats ctx rm --force $CTXNAME
 }
@@ -29,6 +41,7 @@ CTXLIST=( 'System' 'UserA1' 'UserA2' 'UserB1' 'UserB2' 'UserC1' 'UserC2' )
 ACCTLIST=( $SYSTEMACCTNAME 'AcctA' 'AcctA' 'AcctB' 'AcctB' 'AcctC' 'AcctC')
 USERLIST=( $SYSTEMUSERNAME 'UserA1' 'UserA2' 'UserB1' 'UserB2' 'UserC1' 'UserC2' )
 
+delworkaround
 
 for (( i = 0; i < ${#CTXLIST[@]}; ++i )); do
     CTXNAME=${CTXLIST[i]}
@@ -41,3 +54,7 @@ for (( i = 0; i < ${#CTXLIST[@]}; ++i )); do
     USER=${USERLIST[i]}
     setcontext
 done
+
+CTXNAME="System"
+setdefaultcontext
+
