@@ -12,7 +12,7 @@ Instant setup of a NATS lab environment with JetStream enabled, optional docker,
 * nats-server executable in path (if running non-docker lab)
 
 ## Configure Lab
-Edit `lab-bootstrap.sh` if you want to change any defaults, in particular:
+Edit `lab-bootstrap.sh` if you want to change any defaults, such as:
 
 * PKI - If "true" the environment will use JWT-based Accounts and Users  (default "false")
 * DOCKER - If "true" the `run-server.sh` script will docker run the `nats:latest` container  (default "false")
