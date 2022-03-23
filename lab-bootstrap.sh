@@ -17,6 +17,8 @@ SYSTEMUSERNAME="System"
 OPERATORSERVICEURL="nats://${NATSHOST}:${NATSPORT}"
 OPERATORJWTSERVERURL="nats://${NATSHOST}:${NATSPORT}"
 
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 if [ "$DOCKER" = "true" ]; then
   DIRPREFIX=""
 else
@@ -24,6 +26,7 @@ else
 fi
 
 if [ "$PKI" = "true" ]; then
+  nsc env --store $SCRIPT_DIR/vault/nats
   nsc add operator ${OPERATORNAME} 
   nsc edit operator --service-url ${OPERATORSERVICEURL} --account-jwt-server-url ${OPERATORJWTSERVERURL} 
   nsc add account --name ${SYSTEMACCTNAME} 
