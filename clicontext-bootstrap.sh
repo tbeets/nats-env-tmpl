@@ -5,6 +5,7 @@ OPERATORNAME=`cat ./conf/env.json | jq -r .OPERATORNAME`
 SYSTEMACCTNAME=`cat ./conf/env.json | jq -r .SYSTEMACCTNAME`
 SYSTEMUSERNAME=`cat ./conf/env.json | jq -r .SYSTEMUSERNAME`
 PKI=`cat ./conf/env.json | jq -r .PKI`
+TLS=`cat ./conf/env.json | jq -r .TLS`
 
 setdefaultcontext () {
 nats ctx select $CTXNAME
@@ -14,7 +15,7 @@ delworkaround () {
 # workaround to can't delete current default
 nats ctx save \
 		--server ignoreme:1234 \
-	    IGNOREME	
+	    IGNOREME
 nats ctx select IGNOREME
 }
 
@@ -22,12 +23,24 @@ delcontext () {
 nats ctx rm --force $CTXNAME
 }
 
+
+
 setcontext () {
 if [ "${PKI}" = "true" ]; then
-nats ctx save \
-		--server $NATSURL \
-		--creds "$(pwd)/vault/.nkeys/creds/$OPERATORNAME/$ACCT/$USER.creds" \
+	if [ "${TLS}" = "true" ]; then
+		nats ctx save \
+			--server $NATSURL \
+			--creds "$(pwd)/vault/.nkeys/creds/$OPERATORNAME/$ACCT/$USER.creds" \
+			--tlscert "$(pwd)/tls/client-cert.pem" \
+			--tlskey "$(pwd)/tls/client-key.pem" \
+			 --tlsca "$(pwd)/tls/rootCA.pem" \
+			 $CTXNAME
+	else
+			nats ctx save \
+			--server $NATSURL \
+			--creds "$(pwd)/vault/.nkeys/creds/$OPERATORNAME/$ACCT/$USER.creds" \
 	    $CTXNAME
+	fi
 else
 nats ctx save \
 		--server $NATSURL \
@@ -57,4 +70,3 @@ done
 
 CTXNAME="System"
 setdefaultcontext
-
