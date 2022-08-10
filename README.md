@@ -34,10 +34,6 @@ source ./setnscenv.sh; nsc push --all
 nats --context System server list
 ```
 
-Note, We can't run `nsc push --all` yet unless we first disable `tls.verify` in the config file first.
-As a workaround. Stop the server. Comment out `tls.verify` then run the server. Then run the `nsc` push command.
-Then add `tls.verify` back and restart the server.
-
 
 ## Account-based Authentication/Authorization
 
