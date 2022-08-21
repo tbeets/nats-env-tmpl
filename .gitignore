@@ -1,0 +1,12 @@
+conf/env.json
+conf/server.conf
+run-server.sh
+state/.jwt/
+tls/*.pem
+tls/*.jks
+tls/*.p12
+
+
+vault/.nkeys/
+vault/nats/
+vault/nsc.json
