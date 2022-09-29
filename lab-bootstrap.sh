@@ -56,6 +56,8 @@ elif [ "$PKI" = "mtls" ]; then
 # Instantiate CA and TLS certificates
   # server-side
   mkcert -install
+  # so that we are self-contained and can optionally run as container...
+  cp `mkcert -CAROOT`/rootCA.pem ./vault/rootCA.pem
   mkcert -cert-file ./vault/server-cert.pem -key-file ./vault/server-key.pem ${NATSHOST} ::1
   # client-side
   mkcert -client -cert-file ./vault/System-cert.pem -key-file ./vault/System-key.pem System@user.net
@@ -100,7 +102,7 @@ tee --append ./conf/server.conf <<EOF
 tls: {
   cert_file: "./vault/server-cert.pem"
   key_file: "./vault/server-key.pem"
-  ca_file: "`mkcert -CAROOT`/rootCA.pem"
+  ca_file: "./vault/rootCA.pem"
   timeout: 1
 
   # require client cert validation and match cert SAN to a user below

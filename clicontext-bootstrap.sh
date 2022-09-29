@@ -33,7 +33,7 @@ nats ctx save \
 		--server $NATSURL \
 		--tlscert "$(pwd)/vault/$USER-cert.pem" \
 		--tlskey "$(pwd)/vault/$USER-key.pem" \
-		--tlsca "`mkcert -CAROOT`/rootCA.pem" \
+		--tlsca "$(pwd)/vault/rootCA.pem" \
 	    $CTXNAME
 else
 nats ctx save \
