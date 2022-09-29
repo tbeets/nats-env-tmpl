@@ -28,6 +28,13 @@ nats ctx save \
 		--server $NATSURL \
 		--creds "$(pwd)/vault/.nkeys/creds/$OPERATORNAME/$ACCT/$USER.creds" \
 	    $CTXNAME
+elif [ "${PKI}" = "mtls" ]; then
+nats ctx save \
+		--server $NATSURL \
+		--tlscert "$(pwd)/vault/$USER-cert.pem" \
+		--tlskey "$(pwd)/vault/$USER-key.pem" \
+		--tlsca "`mkcert -CAROOT`/rootCA.pem" \
+	    $CTXNAME
 else
 nats ctx save \
 		--server $NATSURL \

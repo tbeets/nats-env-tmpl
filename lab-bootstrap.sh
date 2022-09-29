@@ -3,6 +3,7 @@
 source ./setnscenv.sh
 
 # EDIT THESE
+## PKI can be "false" (user passwords), "true" (user JWT/nkey), or "mtls" (user client TLS/x509 map)
 PKI="false"
 DOCKER="false"
 SERVERNAME="nats-lab"
@@ -26,6 +27,7 @@ else
 fi
 
 if [ "$PKI" = "true" ]; then
+# Instantiate Decentralized NATS Auth
   nsc env --store $SCRIPT_DIR/vault/nats
   nsc add operator ${OPERATORNAME} 
   nsc edit operator --service-url ${OPERATORSERVICEURL} --account-jwt-server-url ${OPERATORJWTSERVERURL} 
@@ -50,6 +52,19 @@ if [ "$PKI" = "true" ]; then
   nsc edit account --name "AcctC" --js-disk-storage=-1 --js-mem-storage=-1 --js-streams=-1 --js-consumer=-1
   nsc add user --name "UserC1" --account "AcctC"
   nsc add user --name "UserC2" --account "AcctC"
+elif [ "$PKI" = "mtls" ]; then
+# Instantiate CA and TLS certificates
+  # server-side
+  mkcert -install
+  mkcert -cert-file ./vault/server-cert.pem -key-file ./vault/server-key.pem ${NATSHOST} ::1
+  # client-side
+  mkcert -client -cert-file ./vault/System-cert.pem -key-file ./vault/System-key.pem System@user.net
+  mkcert -client -cert-file ./vault/UserA1-cert.pem -key-file ./vault/UserA1-key.pem UserA1@user.net
+  mkcert -client -cert-file ./vault/UserA2-cert.pem -key-file ./vault/UserA2-key.pem UserA2@user.net
+  mkcert -client -cert-file ./vault/UserB1-cert.pem -key-file ./vault/UserB1-key.pem UserB1@user.net
+  mkcert -client -cert-file ./vault/UserB2-cert.pem -key-file ./vault/UserB2-key.pem UserB2@user.net
+  mkcert -client -cert-file ./vault/UserC1-cert.pem -key-file ./vault/UserC1-key.pem UserC1@user.net
+  mkcert -client -cert-file ./vault/UserC2-cert.pem -key-file ./vault/UserC2-key.pem UserC2@user.net
 fi
 
 echo -e "\nWriting server configuration:\n"
@@ -65,6 +80,7 @@ jetstream {
 EOF
 
 if [ "$PKI" = "true" ]; then
+# Decentralized NATS Auth server conf
 tee --append ./conf/server.conf <<EOF
 operator: "${DIRPREFIX}/vault/nats/${OPERATORNAME}/${OPERATORNAME}.jwt"
 system_account: "${SYSTEMACCTPUBNKEY}"
@@ -77,7 +93,41 @@ resolver: {
   limit: 1000
 }
 EOF
+elif [ "$PKI" = "mtls" ]; then
+# mTLS NATS Auth server conf
+tee --append ./conf/server.conf <<EOF
+
+tls: {
+  cert_file: "./vault/server-cert.pem"
+  key_file: "./vault/server-key.pem"
+  ca_file: "`mkcert -CAROOT`/rootCA.pem"
+  timeout: 1
+
+  # require client cert validation and match cert SAN to a user below
+  verify_and_map: true
+}
+
+accounts: {
+    AcctA: {
+	  jetstream: enabled
+	  users: [ {user: UserA1@user.net}, {user: UserA2@user.net} ]
+	},
+    AcctB: {
+	  jetstream: enabled
+	  users: [ {user: UserB1@user.net}, {user: UserB2@user.net} ]
+	},
+    AcctC: {
+	  jetstream: enabled
+	  users: [ {user: UserC1@user.net}, {user: UserC2@user.net} ]
+	},
+	${SYSTEMACCTNAME}: {
+	    users: [ {user: ${SYSTEMUSERNAME}@user.net} ]
+    }
+}
+system_account: "${SYSTEMACCTNAME}"
+EOF
 else
+# Password NATS Auth server conf
 tee --append ./conf/server.conf <<EOF
 accounts: {
     AcctA: {
