@@ -44,7 +44,7 @@ nats ctx save \
 fi
 }
 
-CTXLIST=( 'CafeSystem' 'CafeUserA1' 'CafeUserA2' 'CafeUserB1' 'CafeUserB2' 'CafeUserC1' 'CafeUserC2' )
+CTXLIST=( 'System' 'UserA1' 'UserA2' 'UserB1' 'UserB2' 'UserC1' 'UserC2' )
 ACCTLIST=( $SYSTEMACCTNAME 'AcctA' 'AcctA' 'AcctB' 'AcctB' 'AcctC' 'AcctC')
 USERLIST=( $SYSTEMUSERNAME 'UserA1' 'UserA2' 'UserB1' 'UserB2' 'UserC1' 'UserC2' )
 

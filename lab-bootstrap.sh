@@ -4,12 +4,12 @@ source ./setnscenv.sh
 
 # EDIT THESE
 ## PKI can be "false" (user passwords), "true" (user JWT/nkey), or "mtls" (user client TLS/x509 map)
-PKI="mtls"
+PKI="false"
 DOCKER="false"
-SERVERNAME="nats-cafe"
+SERVERNAME="nats-lab"
 NATSHOST="localhost"
-NATSPORT="4322"
-NATSMONITORPORT="8322"
+NATSPORT="4222"
+NATSMONITORPORT="8222"
 OPERATORNAME="NatsOp"
 SYSTEMACCTNAME="SYS"
 SYSTEMUSERNAME="System"
