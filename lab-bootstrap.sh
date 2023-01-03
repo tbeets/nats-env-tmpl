@@ -6,7 +6,7 @@ source ./setnscenv.sh
 ## PKI can be "false" (user passwords), "true" (user JWT/nkey), or "mtls" (user client TLS/x509 map)
 PKI="false"
 DOCKER="false"
-SERVERNAME="nats-cloud"
+SERVERNAME="nats-lab"
 NATSHOST="localhost"
 NATSPORT="4222"
 NATSMONITORPORT="8222"

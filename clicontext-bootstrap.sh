@@ -44,7 +44,7 @@ nats ctx save \
 fi
 }
 
-CTXLIST=( 'CloudSystem' 'CloudUserA1' 'CloudUserA2' 'CloudUserB1' 'CloudUserB2' 'CloudUserC1' 'CloudUserC2' )
+CTXLIST=( 'System' 'UserA1' 'UserA2' 'UserB1' 'UserB2' 'UserC1' 'UserC2' )
 ACCTLIST=( $SYSTEMACCTNAME 'AcctA' 'AcctA' 'AcctB' 'AcctB' 'AcctC' 'AcctC')
 USERLIST=( $SYSTEMUSERNAME 'UserA1' 'UserA2' 'UserB1' 'UserB2' 'UserC1' 'UserC2' )
 
